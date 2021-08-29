@@ -1,5 +1,5 @@
-push = require 'push'
-Class = require 'class'
+push = require 'libs/push'
+Class = require 'libs/class'
 
 require 'Paddle'
 require 'Ball'
@@ -12,15 +12,17 @@ WINDOW_HEIGHT = 720
 VIRTUAL_WIDTH = 432
 VIRTUAL_HEIGHT = 243
 
--- paddle movement speed
-PADDLE_SPEED = 200
+-- paddle
+PADDLE_WIDTH = 5
+PADDLE_HEIGHT = 30
+PADDLE_SPEED = 20
 
 function love.load()
     -- set love's default filter to "nearest-neighbor", which essentially
     -- means there will be no filtering of pixels (blurriness), which is
     -- important for a nice crisp, 2D look
     love.graphics.setDefaultFilter('nearest', 'nearest')
-    love.window.setTitle('Pong')
+    love.window.setTitle('Pong by everag')
 
     math.randomseed(os.time())
 
@@ -45,11 +47,11 @@ function love.load()
     })
 
     -- EVERAG: Left paddle is RED
-    player1 = Paddle(10, 30, 5, 20, 255, 0, 0)
+    player1 = Paddle(10, 30, PADDLE_WIDTH, PADDLE_HEIGHT, 255, 0, 0)
     -- EVERAG: Right paddle is BLUE
     -- EVERAG: Right paddle will have the same distance from the wall as
     -- the left paddle
-    player2 = Paddle(VIRTUAL_WIDTH - 10 - 5, VIRTUAL_HEIGHT - 30, 5, 20, 0, 0, 255)
+    player2 = Paddle(VIRTUAL_WIDTH - 10 - 5, VIRTUAL_HEIGHT - 30, PADDLE_WIDTH, PADDLE_HEIGHT, 0, 0, 255)
 
     ball = Ball(VIRTUAL_WIDTH / 2 - 2, VIRTUAL_HEIGHT / 2 - 2, 4, 4)
 
