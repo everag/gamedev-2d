@@ -14,8 +14,8 @@ VIRTUAL_HEIGHT = 243
 
 -- paddle
 PADDLE_WIDTH = 5
-PADDLE_HEIGHT = 30
-PADDLE_SPEED = 20
+PADDLE_HEIGHT = 100
+PADDLE_SPEED = 60
 
 function love.load()
     -- set love's default filter to "nearest-neighbor", which essentially

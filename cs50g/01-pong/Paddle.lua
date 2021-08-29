@@ -14,6 +14,19 @@ function Paddle:init(x, y, width, height, r, g, b)
 end
 
 function Paddle:update(dt)
+    self:calculateVerticalMovement(dt)
+    self:calculateHorizontalMovement(dt)
+    
+    -- calculates, or not, the overflow paddle
+    local overflow_y = self.y + self.height - VIRTUAL_HEIGHT
+    if overflow_y > 0 then
+        self.overflow = Paddle(self.x, 0, self.width, overflow_y, self.r, self.g, self.b)
+    else
+        self.overflow = nil
+    end
+end
+
+function Paddle:calculateVerticalMovement(dt)
     local new_y = self.y + self.dy * dt
     if self.dy < 0 then
         if new_y < 0 then
@@ -34,14 +47,26 @@ function Paddle:update(dt)
         new_y = VIRTUAL_HEIGHT - new_y
     end
     self.y = new_y
-    
-    -- calculates, or not, the overflow paddle
-    local overflow_y = self.y + self.height - VIRTUAL_HEIGHT
-    if overflow_y > 0 then
-        self.overflow = Paddle(self.x, 0, self.width, overflow_y, self.r, self.g, self.b)
+end
+
+function Paddle:calculateHorizontalMovement(dt)
+    local new_x = self.x + self.dx * dt
+    if self.x < VIRTUAL_WIDTH / 2 then
+        -- left paddle
+        if self.dx < 0 then
+            new_x = math.max(new_x, 10)
+        else
+            new_x = math.min(new_x, VIRTUAL_WIDTH / 2 - 5 - 20)
+        end
     else
-        self.overflow = nil
+        -- right paddle
+        if self.dx < 0 then
+            new_x = math.max(new_x, VIRTUAL_WIDTH / 2 + 20)
+        else
+            new_x = math.min(new_x, VIRTUAL_WIDTH - 10 - 5)
+        end
     end
+    self.x = new_x
 end
 
 function Paddle:render()
