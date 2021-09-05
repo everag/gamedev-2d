@@ -7,12 +7,15 @@ require 'Snake'
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
 
--- scaled down to 5x the real window size
-VIRTUAL_PROPORTION = 20
+-- scaled down to X% of the real window size
+-- TODO: Not working properly with non multiples of 10
+VIRTUAL_PROPORTION = 40
 VIRTUAL_WIDTH = WINDOW_WIDTH / VIRTUAL_PROPORTION
 VIRTUAL_HEIGHT = WINDOW_HEIGHT / VIRTUAL_PROPORTION
 
 SPEED = 10
+
+INITIAL_SNAKE_SIZE = 3
 
 local curr_piece
 local direction
@@ -31,31 +34,15 @@ function love.load()
 
     math.randomseed(os.time())
     
-    curr_piece = Piece(
-        gen_random_coords(),
-        gen_rgb()
-    )
+    local r, g, b = gen_rgb()
+    local x, y = gen_random_coords()
+    curr_piece = Piece(x, y, r, g, b)
 
-    snake = Snake(
-        10, 10,
-        gen_rgb()
-    )
+    r, g, b = gen_rgb()
+    snake = Snake(10, 10, r, g, b)
 
     game_state = 'start'
     direction = 'E'
-end
-
-function gen_random_coords()
-    local x = math.random(0, 255)
-    local y = math.random(0, 255)
-    return x, y
-end
-
-function gen_rgb()
-    local r = math.random(0, 255)
-    local g = math.random(0, 255)
-    local b = math.random(0, 255)
-    return r, g, b
 end
 
 function love.update(dt)
@@ -75,6 +62,10 @@ function love.update(dt)
 
     if game_state == 'play' then
         snake:update(dt)
+    end
+
+    if snake:is_oob() then
+        game_state = 'game_over'
     end
 end
 
@@ -122,4 +113,17 @@ end
 
 function love.resize(w, h)
     push:resize(w, h)
+end
+
+function gen_random_coords()
+    return 
+        math.random(0, VIRTUAL_WIDTH - 1),
+        math.random(0, VIRTUAL_HEIGHT - 1)
+end
+
+function gen_rgb()
+    return 
+        math.random(0, 255),
+        math.random(0, 255),
+        math.random(0, 255)
 end
